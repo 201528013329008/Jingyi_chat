@@ -9,13 +9,87 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate,RCIMUserInfoDataSource {
 
     var window: UIWindow?
+    func getUserInfoWithUserId(userId: String!, completion: ((RCUserInfo!) -> Void)!) {
+        
+        
+        
+        let userInfo = RCUserInfo()
+        userInfo.userId = userId
+        switch userId{
+        case "liujingyi":
+            userInfo.name = "刘敬一"
+            userInfo.portraitUri="https://liujingyi.s3-us-west-2.amazonaws.com/categories/images/000/000/005/medium/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7_2015-12-27_16.46.28.png?1453129169"
+        case "xiaophai":
+            userInfo.name = "二进制小p孩"
+            userInfo.portraitUri="https://liujingyi.s3-us-west-2.amazonaws.com/categories/images/000/000/015/medium/f.jpeg?1453131095"
+        default:
+            print("wu")
+        }
+        return completion(userInfo)
+    }
 
+          //  没有名字的函数 闭包  不需要参数和返回值
+    
+    func connectserver(completion:()->Void ){
+        //   查询保存的token
+//
+//        let tokenCache =
+//        NSUserDefaults.standardUserDefaults().objectForKey("KDeviceToken")
+//            as? String
+//
+        //  初始化appkey
+        RCIM.sharedRCIM().initWithAppKey("ik1qhw0917qip")
+        
+
+        
+        // 用token测试连接
+    RCIM.sharedRCIM().connectWithToken("KGDYau7hkTHkYxqYLKa7Z3YItU4VSzzlCU4468ZYDKUST4bYLEUZ7+fZdgH1XRrjU1gXxRgvlDWHCc74ZqHCNA==", success:
+            {(_)-> Void in
+               
+                let currentUser = RCUserInfo(userId:"liujingyi", name: "刘敬一", portrait:"https://liujingyi.s3-us-west-2.amazonaws.com/categories/images/000/000/005/medium/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7_2015-12-27_16.46.28.png?1453129169")
+//                  let currentUser = RCUserInfo(userId:"xiaophai", name: "二进制小p孩", portrait:"https://liujingyi.s3-us-west-2.amazonaws.com/categories/images/000/000/015/medium/f.jpeg?1453131095")
+              RCIMClient.sharedRCIMClient().currentUserInfo = currentUser
+                print("连接成功1")
+                
+                
+                dispatch_async(dispatch_get_main_queue(),{
+                ()->Void in
+              
+                
+                
+                completion()
+                })
+            },
+            error:{(_) ->Void in
+                print("连接失败")})
+            
+            {() ->Void in
+                print("token失效")
+                
+                
+                
+                
+        }
+    }
+    
+    
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //设置用户信息提供者为自己
+        RCIM.sharedRCIM().userInfoDataSource = self
+        
+        // applicationId 即 App Id，clientKey 是 App Key。
+//        获得leancloudshouquan
+
+        AVOSCloud.setApplicationId("0tlEeMvgC7vpN20K6cqLRpgY-gzGzoHsz", clientKey: "1d9zaX1reqwsTcWhAcDO59mt")
+        
+        
+        
         return true
     }
 

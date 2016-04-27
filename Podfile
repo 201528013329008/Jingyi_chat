@@ -1,0 +1,6 @@
+pod 'RongCloudIMKit', '2.2.7'
+pod 'KxMenu'
+pod 'PopMenu'
+pod 'JSAnimatedImagesView'
+pod 'AJWValidator'
+pod 'AVOSCloud'
